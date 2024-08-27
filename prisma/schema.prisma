@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Insurer {
+  id                Int      @id @default(autoincrement())
+  insurerName       String   @db.VarChar()
+  insurerEmail      String   @db.VarChar()
+  insurerMobile     Int?
+  insurerAddress    String?
+  insurerPostalCode String?  @db.VarChar(20)
+  insurerDivision   String?  @db.VarChar()
+  insurerDistrict   String?  @db.VarChar()
+  insurerThana      String?  @db.VarChar()
+  insurerCountry    String?  @db.VarChar()
+  activeStatus      Int      @default(0) @db.SmallInt() // 1=active; 0=inactive; -1=deleted;
+  createdAt         DateTime @default(now())
+  createdBy         String?  @db.Uuid()
+  updatedAt         DateTime @updatedAt
+}
+
+enum GENDER {
+  MALE
+  FEMALE
+  OTHER
+}
+
+model User {
+  id                  Int       @id @default(autoincrement())
+  uuid                String    @unique @default(uuid()) @db.Uuid()
+  fullName            String    @db.VarChar()
+  mobileNumber        String    @db.VarChar(20)
+  email               String    @db.VarChar(50)
+  nationalID          Int?
+  gender              GENDER?
+  dob                 DateTime  @db.Date()
+  division            String?   @db.VarChar(40)
+  district            String?   @db.VarChar(40)
+  thana               String?   @db.VarChar(100)
+  postalCode          String?   @db.VarChar(10)
+  address             String?
+  nomineeFullName     String?   @db.VarChar()
+  nomineeMobileNumber Int?
+  nomineeDob          DateTime? @db.Date()
+  relationship        String?   @db.VarChar(50)
+  activeStatus        Int       @default(1) @db.SmallInt // 1=active; 0=inactive; -1=deleted;
+  remarks             String?
+  createdAt           DateTime  @default(now())
+  createdBy           String?   @db.Uuid()
+  updatedAt           DateTime? @updatedAt
+  updatedBy           String?   @db.Uuid()
+}
